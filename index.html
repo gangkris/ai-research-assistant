@@ -1,0 +1,537 @@
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E4E7DD;
+    --paper-raised:#EEF0E7;
+    --ink:#1E2A22;
+    --ink-soft:#4B5A4F;
+    --teal:#1F4B43;
+    --teal-deep:#173B34;
+    --brass:#AD8226;
+    --line:#B7C0AC;
+    --white:#F7F8F3;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;}
+  .console{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:28px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .masthead{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px; margin-bottom:22px; flex-wrap:wrap; gap:10px;
+  }
+  .masthead h1{
+    font-family:'Fraunces',serif; font-weight:600; font-size:28px; margin:0;
+    letter-spacing:.2px;
+  }
+  .masthead .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:1.5px; color:var(--teal); margin-bottom:4px;
+  }
+  .masthead .sub{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:1px;
+  }
+  .grid{ display:grid; grid-template-columns:1.6fr 1fr; gap:24px; }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } }
+
+  .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:5px; padding:20px; }
+  .panel + .panel{ margin-top:18px; }
+  .label{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:1.2px; color:var(--teal-deep); display:block; margin-bottom:6px;
+  }
+  input[type=text], input[type=date], textarea, select{
+    width:100%; font-family:'IBM Plex Sans',sans-serif; font-size:14px;
+    padding:9px 10px; border:1px solid var(--line); border-radius:3px;
+    background:var(--white); color:var(--ink); margin-bottom:14px;
+  }
+  textarea{ resize:vertical; min-height:56px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; min-height:20px; }
+  .chip{
+    font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; padding:6px 12px;
+    border:1px solid var(--line); border-radius:999px; background:var(--white);
+    cursor:pointer; user-select:none; color:var(--ink-soft); transition:border-color .1s, color .1s, background .1s;
+  }
+  .chip:hover{ border-color:var(--teal); }
+  .chip.selected{ background:var(--teal); border-color:var(--teal); color:var(--white); }
+  .chips-hint{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-soft); margin:-6px 0 10px; }
+
+  button.run{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; text-transform:uppercase;
+    letter-spacing:1.2px; background:var(--teal); color:var(--white); border:none;
+    padding:12px 18px; border-radius:3px; cursor:pointer; width:100%;
+  }
+  button.run:hover{ background:var(--teal-deep); }
+  button.run:disabled{ background:#8b978f; cursor:default; }
+
+  .status{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:10px; min-height:16px; }
+  .error{ color:#8a2f2f; }
+
+  .result{ margin-top:18px; padding-top:16px; border-top:1px dashed var(--line); }
+  .result h3{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--teal-deep); margin:16px 0 6px; }
+  .result h3:first-child{ margin-top:0; }
+  .result p{ font-size:14px; line-height:1.55; margin:6px 0; }
+  .result ul, .result ol{ margin:6px 0; padding-left:20px; font-size:14px; line-height:1.5; }
+  .result table{ width:100%; border-collapse:collapse; font-size:13px; margin:8px 0; }
+  .result th, .result td{ border:1px solid var(--line); padding:6px 8px; text-align:left; }
+  .result th{ background:var(--white); font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+  .result a{ color:var(--teal-deep); }
+  .result strong{ color:var(--ink); }
+
+  /* Ledger sidebar */
+  .ledger-title{
+    font-family:'Fraunces',serif; font-weight:600; font-size:16px; margin:0 0 4px;
+  }
+  .ledger-hint{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .tag{
+    position:relative; background:var(--white); border:1px solid var(--line);
+    border-radius:2px 8px 8px 2px; padding:10px 12px 10px 26px; margin-bottom:10px;
+    cursor:pointer; font-family:'IBM Plex Sans',sans-serif;
+  }
+  .tag:hover{ border-color:var(--teal); }
+  .tag.active{ border-color:var(--teal); background:#F1F4EC; }
+  .tag::before{
+    content:""; position:absolute; left:9px; top:50%; transform:translateY(-50%);
+    width:7px; height:7px; border-radius:50%; background:var(--paper);
+    border:1px solid var(--ink-soft);
+  }
+  .tag .name{ font-weight:600; font-size:13.5px; }
+  .tag .meta{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--teal-deep); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+  .tag .count{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-soft); margin-top:2px; }
+  .empty{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); }
+
+  .log-entries{ margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
+  .log-entry{ margin-bottom:14px; }
+  .log-entry .q{ font-size:12.5px; font-weight:600; margin-bottom:2px; }
+  .log-entry .d{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-soft); margin-bottom:4px; }
+  .log-entry .s{ font-size:12.5px; line-height:1.5; color:var(--ink-soft); }
+</style>
+
+<div class="console">
+  <div class="masthead">
+    <div>
+      <div class="kicker">Field Research Console</div>
+      <h1>Trip Ledger</h1>
+    </div>
+    <div class="sub">Weekend getaways · One annual trip · US-based · Departing MSP</div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <span class="label">Destination</span>
+        <input type="text" id="destination" placeholder="e.g. Asheville, NC">
+
+        <div class="row2">
+          <div>
+            <span class="label">Trip type</span>
+            <select id="tripType">
+              <option value="Weekend getaway">Weekend getaway</option>
+              <option value="Annual trip">Big annual trip</option>
+            </select>
+          </div>
+          <div>
+            <span class="label">Travelers</span>
+            <input type="text" id="travelers" placeholder="2 (me + spouse)" value="2 (me + spouse)">
+          </div>
+        </div>
+
+        <span class="label">Trip details <span style="text-transform:none;letter-spacing:0;">(optional)</span></span>
+        <div class="row2">
+          <div>
+            <span class="label">Start date</span>
+            <input type="date" id="dateStart">
+          </div>
+          <div>
+            <span class="label">End date</span>
+            <input type="date" id="dateEnd">
+          </div>
+        </div>
+        <span class="label">Budget</span>
+        <input type="text" id="budget" placeholder="e.g. under $1,200 total">
+
+        <span class="label">What matters most to you <span style="text-transform:none;letter-spacing:0;">(optional)</span></span>
+        <div class="chips-hint" id="chipsHint">Enter a destination above to see suggestions</div>
+        <div class="chips" id="interestChips"></div>
+        <input type="text" id="interestsOther" placeholder="Anything else not listed above?">
+
+        <span class="label">Transportation preference</span>
+        <input type="text" id="transport" placeholder="e.g. driving from home, prefer no rental car">
+
+        <span class="label">What do you want to research?</span>
+        <textarea id="query" placeholder="Leave blank for a general overview, or ask something specific — e.g. Compare 3-night hotel options downtown vs. Airbnb near the trailheads"></textarea>
+
+        <button class="run" id="runBtn">Research this</button>
+        <div class="status" id="status"></div>
+      </div>
+
+      <div class="panel" id="resultPanel" style="display:none;">
+        <div class="result" id="resultBody"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ledger-title">Saved trips</div>
+      <div class="ledger-hint">Tap a tag to review what's logged so far</div>
+      <div id="tagList"><div class="empty">No trips researched yet.</div></div>
+      <div id="logEntries"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const destEl = document.getElementById('destination');
+const tripTypeEl = document.getElementById('tripType');
+const travelersEl = document.getElementById('travelers');
+const queryEl = document.getElementById('query');
+const dateStartEl = document.getElementById('dateStart');
+const dateEndEl = document.getElementById('dateEnd');
+const budgetEl = document.getElementById('budget');
+const chipsHintEl = document.getElementById('chipsHint');
+const interestChipsEl = document.getElementById('interestChips');
+const interestsOtherEl = document.getElementById('interestsOther');
+const transportEl = document.getElementById('transport');
+const runBtn = document.getElementById('runBtn');
+const statusEl = document.getElementById('status');
+const resultPanel = document.getElementById('resultPanel');
+const resultBody = document.getElementById('resultBody');
+const tagList = document.getElementById('tagList');
+const logEntries = document.getElementById('logEntries');
+
+let activeSlug = null;
+let selectedInterests = [];
+let lastInterestDestination = '';
+
+function slugify(s){
+  return s.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+function formatDate(d){
+  if(!d) return '';
+  const [y,m,day] = d.split('-');
+  const dt = new Date(Number(y), Number(m)-1, Number(day));
+  return dt.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+}
+
+function renderChips(options){
+  interestChipsEl.innerHTML = options.map(opt => {
+    const selected = selectedInterests.includes(opt);
+    return `<div class="chip${selected?' selected':''}" data-opt="${escapeHtml(opt)}">${escapeHtml(opt)}</div>`;
+  }).join('');
+  interestChipsEl.querySelectorAll('.chip').forEach(el => {
+    el.addEventListener('click', () => {
+      const opt = el.getAttribute('data-opt');
+      if(selectedInterests.includes(opt)){
+        selectedInterests = selectedInterests.filter(o => o !== opt);
+      } else {
+        selectedInterests.push(opt);
+      }
+      el.classList.toggle('selected');
+    });
+  });
+}
+
+async function fetchInterestOptions(destination){
+  if(!destination){ interestChipsEl.innerHTML=''; chipsHintEl.textContent='Enter a destination above to see suggestions'; chipsHintEl.style.display='block'; return; }
+  if(destination === lastInterestDestination) return;
+  lastInterestDestination = destination;
+  selectedInterests = [];
+  chipsHintEl.textContent = 'Finding relevant interests for ' + destination + '…';
+  chipsHintEl.style.display = 'block';
+  interestChipsEl.innerHTML = '';
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: "Given a travel destination, output ONLY a JSON array (no prose, no markdown fences) of 7-9 short strings (2-4 words each) naming the most relevant, destination-specific traveler interest categories or activities for that place. Tailor them to what that destination is actually known for, not generic travel categories.",
+        messages: [{ role: "user", content: destination }]
+      })
+    });
+    if(!response.ok) throw new Error('API error ' + response.status);
+    const data = await response.json();
+    const text = (data.content || []).map(b => b.type === 'text' ? b.text : '').filter(Boolean).join('');
+    const cleaned = text.trim().replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+    const options = JSON.parse(cleaned);
+    if(Array.isArray(options) && options.length){
+      chipsHintEl.style.display = 'none';
+      renderChips(options);
+    } else {
+      throw new Error('empty options');
+    }
+  }catch(e){
+    console.error('Interest suggestion error:', e);
+    chipsHintEl.textContent = "Couldn't load suggestions — just use the field below.";
+  }
+}
+
+// ---- minimal markdown renderer ----
+function mdToHtml(md){
+  const lines = md.replace(/\r/g,'').split('\n');
+  let html = '';
+  let inList = null; // 'ul' | 'ol'
+  let tableBuf = [];
+
+  function flushList(){
+    if(inList){ html += '</'+inList+'>'; inList=null; }
+  }
+  function flushTable(){
+    if(tableBuf.length){
+      const rows = tableBuf.filter(r => !/^\s*\|?\s*-{2,}/.test(r));
+      html += '<table>';
+      rows.forEach((r,i)=>{
+        const cells = r.trim().replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+        const tag = i===0 ? 'th' : 'td';
+        html += '<tr>' + cells.map(c=>'<'+tag+'>'+inline(c)+'</'+tag+'>').join('') + '</tr>';
+      });
+      html += '</table>';
+      tableBuf = [];
+    }
+  }
+  function inline(t){
+    return t
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+
+  for(const raw of lines){
+    const line = raw;
+    if(/^\s*\|/.test(line)){ tableBuf.push(line); continue; }
+    else if(tableBuf.length){ flushTable(); }
+
+    if(/^###\s+/.test(line)){ flushList(); html += '<h3>'+inline(line.replace(/^###\s+/,''))+'</h3>'; continue; }
+    if(/^##\s+/.test(line)){ flushList(); html += '<h3>'+inline(line.replace(/^##\s+/,''))+'</h3>'; continue; }
+    if(/^#\s+/.test(line)){ flushList(); html += '<h3>'+inline(line.replace(/^#\s+/,''))+'</h3>'; continue; }
+
+    if(/^\s*[-*]\s+/.test(line)){
+      if(inList !== 'ul'){ flushList(); html += '<ul>'; inList='ul'; }
+      html += '<li>'+inline(line.replace(/^\s*[-*]\s+/,''))+'</li>';
+      continue;
+    }
+    if(/^\s*\d+\.\s+/.test(line)){
+      if(inList !== 'ol'){ flushList(); html += '<ol>'; inList='ol'; }
+      html += '<li>'+inline(line.replace(/^\s*\d+\.\s+/,''))+'</li>';
+      continue;
+    }
+    flushList();
+    if(line.trim() === ''){ continue; }
+    html += '<p>'+inline(line)+'</p>';
+  }
+  flushList(); flushTable();
+  return html;
+}
+
+async function runResearch(){
+  const destination = destEl.value.trim();
+  const userTypedQuery = queryEl.value.trim();
+  const query = userTypedQuery || 'Give a general first-look overview for this trip: when to go, roughly what it costs, how to get there, where to stay, and 3-4 can\'t-miss things to do.';
+  const logLabel = userTypedQuery || 'General overview';
+  const combinedInterests = [...selectedInterests, interestsOtherEl.value.trim()].filter(Boolean).join(', ');
+  if(!destination){ statusEl.innerHTML = '<span class="error">Enter a destination first.</span>'; return; }
+
+  runBtn.disabled = true;
+  statusEl.textContent = 'Searching the web and comparing sources…';
+  resultPanel.style.display = 'none';
+
+  const context = [
+    'Destination: ' + destination,
+    'Trip type: ' + tripTypeEl.value,
+    'Travelers: ' + (travelersEl.value.trim() || 'not specified'),
+    (dateStartEl.value || dateEndEl.value) ? 'Dates: ' + (dateStartEl.value ? formatDate(dateStartEl.value) : '?') + ' to ' + (dateEndEl.value ? formatDate(dateEndEl.value) : '?') : null,
+    budgetEl.value.trim() ? 'Budget: ' + budgetEl.value.trim() : null,
+    combinedInterests ? 'What matters most: ' + combinedInterests : null,
+    transportEl.value.trim() ? 'Transportation preference: ' + transportEl.value.trim() : null,
+  ].filter(Boolean).join('\n');
+
+  const systemPrompt = `You are a trip planning research assistant for a married couple planning US-based personal travel. Their trips are either weekend getaways or one big annual trip. They have limited PTO and busy work schedules, so time-efficient, decision-ready answers matter most. Both travelers are vegetarian. Their home airport/hub is Minneapolis (MSP) — whenever flights are relevant to the research request, compare options departing from Minneapolis specifically (nonstop vs. connecting, typical cost, airlines) rather than generic "from the US" pricing.
+
+Hard avoidances unless the traveler explicitly asks otherwise:
+- Overpacked itineraries
+- Driving days longer than 6 hours
+- High-cost options (default to budget-conscious, not luxury)
+If a strong option would break one of these, still mention it but flag the trade-off clearly.
+
+For every research request:
+1. Perform a live web search before answering. Do not rely on memory for prices, hours, or availability.
+2. Compare information across at least 2-3 reputable sources.
+3. Synthesize findings into a concise recommendation rather than listing raw results.
+4. Include real source names/links.
+5. If there are trade-offs between options, lay out pros and cons before recommending one.
+6. Always include a short "Restaurant Recommendations" element covering 2-4 vegetarian-friendly restaurants near the destination/area in question — any cuisine is fine as long as it has solid vegetarian options. Skip this only if the research request is clearly unrelated to food or lodging area (e.g. a pure logistics question like "what's the driving time").
+
+Respond ONLY in this exact markdown structure with these exact headers:
+### Summary
+### Key Findings
+### Sources
+### Saved Research
+
+Keep it concise but decision-ready. Use bullet points or a markdown table under Key Findings when comparing options. Include vegetarian restaurant picks within Key Findings (or as its own labeled subsection) when relevant. "Saved Research" should be one short line summarizing what to remember about this trip going forward.`;
+
+  const userMessage = `Trip context:\n${context}\n\nResearch request: ${query}`;
+
+  try{
+    let messages = [{ role: "user", content: userMessage }];
+    let fullText = '';
+    let iterations = 0;
+    const maxIterations = 4;
+
+    while(iterations < maxIterations){
+      iterations++;
+      if(iterations > 1){ statusEl.textContent = 'Response was long — fetching the rest…'; }
+
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: messages,
+          tools: [{ type: "web_search_20250305", name: "web_search" }]
+        })
+      });
+
+      if(!response.ok){ throw new Error('API error ' + response.status); }
+      const data = await response.json();
+
+      const textPart = (data.content || [])
+        .map(block => block.type === 'text' ? block.text : '')
+        .filter(Boolean)
+        .join('\n');
+      fullText += textPart;
+
+      if(data.stop_reason === 'max_tokens'){
+        messages = [
+          ...messages,
+          { role: 'assistant', content: data.content },
+          { role: 'user', content: 'Continue exactly where you left off. Do not repeat any earlier text and do not restart any section — just continue the markdown from the exact cut-off point.' }
+        ];
+        continue;
+      }
+      break;
+    }
+
+    const text = fullText;
+    if(!text){ throw new Error('No response text returned'); }
+
+    resultBody.innerHTML = mdToHtml(text);
+    resultPanel.style.display = 'block';
+    statusEl.textContent = 'Done.';
+
+    await saveEntry(destination, tripTypeEl.value, logLabel, text);
+    await renderLedger();
+    activeSlug = slugify(destination);
+    await showEntries(activeSlug);
+
+  } catch(err){
+    console.error('Research error:', err);
+    statusEl.innerHTML = '<span class="error">Something went wrong: ' + (err.message || err) + '</span>';
+  } finally {
+    runBtn.disabled = false;
+  }
+}
+
+async function saveEntry(destination, tripType, query, responseText){
+  const slug = slugify(destination);
+  const key = 'trip:' + slug;
+  let trip = null;
+  try{
+    const existing = await window.storage.get(key, false);
+    trip = existing ? JSON.parse(existing.value) : null;
+  }catch(e){ trip = null; }
+
+  if(!trip){ trip = { destination, tripType, entries: [] }; }
+  trip.tripType = tripType;
+  // short summary line for the sidebar log (first ~220 chars of the Summary section)
+  const summaryMatch = responseText.match(/###\s*Summary\s*\n([\s\S]*?)(\n###|$)/i);
+  const shortSummary = (summaryMatch ? summaryMatch[1] : responseText).trim().slice(0, 220);
+
+  trip.entries.push({
+    ts: new Date().toISOString(),
+    query,
+    summary: shortSummary
+  });
+
+  try{
+    await window.storage.set(key, JSON.stringify(trip), false);
+  }catch(e){ console.error('Storage save failed', e); }
+}
+
+async function renderLedger(){
+  let keys = [];
+  try{
+    const res = await window.storage.list('trip:', false);
+    keys = res && res.keys ? res.keys : [];
+  }catch(e){ keys = []; }
+
+  if(!keys.length){
+    tagList.innerHTML = '<div class="empty">No trips researched yet.</div>';
+    return;
+  }
+
+  const trips = [];
+  for(const k of keys){
+    try{
+      const res = await window.storage.get(k, false);
+      if(res) trips.push(JSON.parse(res.value));
+    }catch(e){ /* skip unreadable key */ }
+  }
+
+  tagList.innerHTML = trips.map(t => {
+    const slug = slugify(t.destination);
+    return `<div class="tag${slug===activeSlug?' active':''}" data-slug="${slug}">
+      <div class="name">${escapeHtml(t.destination)}</div>
+      <div class="meta">${escapeHtml(t.tripType || '')}</div>
+      <div class="count">${t.entries.length} ${t.entries.length===1?'search':'searches'} logged</div>
+    </div>`;
+  }).join('');
+
+  tagList.querySelectorAll('.tag').forEach(el => {
+    el.addEventListener('click', () => {
+      activeSlug = el.getAttribute('data-slug');
+      renderLedger();
+      showEntries(activeSlug);
+    });
+  });
+}
+
+async function showEntries(slug){
+  try{
+    const res = await window.storage.get('trip:' + slug, false);
+    if(!res){ logEntries.innerHTML = ''; return; }
+    const trip = JSON.parse(res.value);
+    logEntries.innerHTML = '<div class="log-entries">' + trip.entries.slice().reverse().map(e => `
+      <div class="log-entry">
+        <div class="q">${escapeHtml(e.query)}</div>
+        <div class="d">${new Date(e.ts).toLocaleDateString()}</div>
+        <div class="s">${escapeHtml(e.summary)}${e.summary.length>=220?'…':''}</div>
+      </div>
+    `).join('') + '</div>';
+  }catch(e){
+    logEntries.innerHTML = '';
+  }
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+runBtn.addEventListener('click', runResearch);
+destEl.addEventListener('blur', () => fetchInterestOptions(destEl.value.trim()));
+destEl.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ fetchInterestOptions(destEl.value.trim()); } });
+renderLedger();
+</script>
