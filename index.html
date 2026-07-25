@@ -1,4 +1,3 @@
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#E4E7DD;
@@ -10,9 +9,12 @@
     --brass:#AD8226;
     --line:#B7C0AC;
     --white:#F7F8F3;
+    --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
   }
   *{box-sizing:border-box;}
-  body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;}
+  body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:var(--font-body);}
   .console{
     background:var(--paper);
     border:1px solid var(--line);
@@ -27,15 +29,15 @@
     padding-bottom:14px; margin-bottom:22px; flex-wrap:wrap; gap:10px;
   }
   .masthead h1{
-    font-family:'Fraunces',serif; font-weight:600; font-size:28px; margin:0;
+    font-family:var(--font-display); font-weight:600; font-size:28px; margin:0;
     letter-spacing:.2px;
   }
   .masthead .kicker{
-    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+    font-family:var(--font-mono); font-size:11px; text-transform:uppercase;
     letter-spacing:1.5px; color:var(--teal); margin-bottom:4px;
   }
   .masthead .sub{
-    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft);
+    font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);
     text-transform:uppercase; letter-spacing:1px;
   }
   .grid{ display:grid; grid-template-columns:1.6fr 1fr; gap:24px; }
@@ -44,11 +46,11 @@
   .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:5px; padding:20px; }
   .panel + .panel{ margin-top:18px; }
   .label{
-    font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase;
+    font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase;
     letter-spacing:1.2px; color:var(--teal-deep); display:block; margin-bottom:6px;
   }
   input[type=text], input[type=date], textarea, select{
-    width:100%; font-family:'IBM Plex Sans',sans-serif; font-size:14px;
+    width:100%; font-family:var(--font-body); font-size:14px;
     padding:9px 10px; border:1px solid var(--line); border-radius:3px;
     background:var(--white); color:var(--ink); margin-bottom:14px;
   }
@@ -57,45 +59,64 @@
 
   .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; min-height:20px; }
   .chip{
-    font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; padding:6px 12px;
+    font-family:var(--font-body); font-size:12.5px; padding:6px 12px;
     border:1px solid var(--line); border-radius:999px; background:var(--white);
     cursor:pointer; user-select:none; color:var(--ink-soft); transition:border-color .1s, color .1s, background .1s;
   }
   .chip:hover{ border-color:var(--teal); }
   .chip.selected{ background:var(--teal); border-color:var(--teal); color:var(--white); }
-  .chips-hint{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-soft); margin:-6px 0 10px; }
+  .chips-hint{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); margin:-6px 0 10px; }
 
   button.run{
-    font-family:'IBM Plex Mono',monospace; font-size:12.5px; text-transform:uppercase;
+    font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase;
     letter-spacing:1.2px; background:var(--teal); color:var(--white); border:none;
     padding:12px 18px; border-radius:3px; cursor:pointer; width:100%;
   }
   button.run:hover{ background:var(--teal-deep); }
   button.run:disabled{ background:#8b978f; cursor:default; }
 
-  .status{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:10px; min-height:16px; }
+  .status{ font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); margin-top:10px; min-height:16px; display:flex; align-items:center; gap:8px; }
   .error{ color:#8a2f2f; }
 
+  .spinner{
+    width:9px; height:9px; border-radius:50%; background:var(--teal);
+    animation:pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:.25; transform:scale(.8); }
+    50%{ opacity:1; transform:scale(1); }
+  }
+
+  .search-log{ margin-top:8px; display:flex; flex-direction:column; gap:5px; }
+  .search-log-item{
+    font-family:var(--font-mono); font-size:11px; color:var(--teal-deep);
+    background:var(--white); border:1px solid var(--line); border-radius:3px;
+    padding:5px 9px; animation:fadein .25s ease-out;
+  }
+  @keyframes fadein{ from{ opacity:0; transform:translateY(-3px); } to{ opacity:1; transform:translateY(0); } }
+  .pdf-note{ font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:10px; }
+  .pdf-note a{ color:var(--teal-deep); }
+
   .result{ margin-top:18px; padding-top:16px; border-top:1px dashed var(--line); }
-  .result h3{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--teal-deep); margin:16px 0 6px; }
+  .result h3{ font-family:var(--font-display); font-weight:600; font-size:17px; color:var(--teal-deep); margin:16px 0 6px; }
   .result h3:first-child{ margin-top:0; }
   .result p{ font-size:14px; line-height:1.55; margin:6px 0; }
   .result ul, .result ol{ margin:6px 0; padding-left:20px; font-size:14px; line-height:1.5; }
   .result table{ width:100%; border-collapse:collapse; font-size:13px; margin:8px 0; }
   .result th, .result td{ border:1px solid var(--line); padding:6px 8px; text-align:left; }
-  .result th{ background:var(--white); font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+  .result th{ background:var(--white); font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
   .result a{ color:var(--teal-deep); }
   .result strong{ color:var(--ink); }
 
   /* Ledger sidebar */
   .ledger-title{
-    font-family:'Fraunces',serif; font-weight:600; font-size:16px; margin:0 0 4px;
+    font-family:var(--font-display); font-weight:600; font-size:16px; margin:0 0 4px;
   }
-  .ledger-hint{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .ledger-hint{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); margin-bottom:14px; }
   .tag{
     position:relative; background:var(--white); border:1px solid var(--line);
     border-radius:2px 8px 8px 2px; padding:10px 12px 10px 26px; margin-bottom:10px;
-    cursor:pointer; font-family:'IBM Plex Sans',sans-serif;
+    cursor:pointer; font-family:var(--font-body);
   }
   .tag:hover{ border-color:var(--teal); }
   .tag.active{ border-color:var(--teal); background:#F1F4EC; }
@@ -105,15 +126,21 @@
     border:1px solid var(--ink-soft);
   }
   .tag .name{ font-weight:600; font-size:13.5px; }
-  .tag .meta{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--teal-deep); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
-  .tag .count{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-soft); margin-top:2px; }
-  .empty{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); }
+  .tag .meta{ font-family:var(--font-mono); font-size:10px; color:var(--teal-deep); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+  .tag .count{ font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); margin-top:2px; }
+  .empty{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); }
 
   .log-entries{ margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
   .log-entry{ margin-bottom:14px; }
   .log-entry .q{ font-size:12.5px; font-weight:600; margin-bottom:2px; }
-  .log-entry .d{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-soft); margin-bottom:4px; }
+  .log-entry .d{ font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); margin-bottom:4px; }
   .log-entry .s{ font-size:12.5px; line-height:1.5; color:var(--ink-soft); }
+
+  .pdf-btn{
+    font-family:var(--font-mono); font-size:11px; background:none; border:1px solid var(--teal);
+    color:var(--teal-deep); padding:3px 9px; border-radius:3px; cursor:pointer; margin-left:6px;
+  }
+  .pdf-btn:hover{ background:var(--teal); color:var(--white); }
 </style>
 
 <div class="console">
@@ -172,6 +199,8 @@
 
         <button class="run" id="runBtn">Research this</button>
         <div class="status" id="status"></div>
+        <div class="search-log" id="searchLog"></div>
+        <div class="pdf-note" id="pdfNote"></div>
       </div>
 
       <div class="panel" id="resultPanel" style="display:none;">
@@ -202,6 +231,8 @@ const interestsOtherEl = document.getElementById('interestsOther');
 const transportEl = document.getElementById('transport');
 const runBtn = document.getElementById('runBtn');
 const statusEl = document.getElementById('status');
+const searchLogEl = document.getElementById('searchLog');
+const pdfNoteEl = document.getElementById('pdfNote');
 const resultPanel = document.getElementById('resultPanel');
 const resultBody = document.getElementById('resultBody');
 const tagList = document.getElementById('tagList');
@@ -220,6 +251,21 @@ function formatDate(d){
   const [y,m,day] = d.split('-');
   const dt = new Date(Number(y), Number(m)-1, Number(day));
   return dt.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+}
+
+function setStatus(text, spinning){
+  statusEl.innerHTML = (spinning ? '<span class="spinner"></span>' : '') + '<span>' + escapeHtml(text) + '</span>';
+}
+
+function clearSearchLog(){
+  searchLogEl.innerHTML = '';
+}
+
+function addSearchLogItem(query){
+  const item = document.createElement('div');
+  item.className = 'search-log-item';
+  item.textContent = '🔎 Searching: "' + query + '"';
+  searchLogEl.appendChild(item);
 }
 
 function renderChips(options){
@@ -335,6 +381,232 @@ function mdToHtml(md){
   return html;
 }
 
+async function streamClaude(messages, systemPrompt, tools){
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: messages,
+      tools: tools,
+      stream: true
+    })
+  });
+  if(!response.ok){ throw new Error('API error ' + response.status); }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let blocks = {};
+  let stopReason = null;
+  let sawText = false;
+
+  while(true){
+    const { done, value } = await reader.read();
+    if(done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const chunks = buffer.split('\n\n');
+    buffer = chunks.pop();
+
+    for(const chunk of chunks){
+      const dataLine = chunk.split('\n').find(l => l.startsWith('data:'));
+      if(!dataLine) continue;
+      let evt;
+      try{ evt = JSON.parse(dataLine.slice(5).trim()); } catch(e){ continue; }
+
+      if(evt.type === 'content_block_start'){
+        blocks[evt.index] = { type: evt.content_block.type, name: evt.content_block.name, text: '', partialJson: '' };
+      } else if(evt.type === 'content_block_delta'){
+        const b = blocks[evt.index];
+        if(!b) continue;
+        if(evt.delta.type === 'text_delta'){
+          b.text += evt.delta.text;
+          if(!sawText){ sawText = true; setStatus('Writing your recommendations…', true); }
+        } else if(evt.delta.type === 'input_json_delta'){
+          b.partialJson += evt.delta.partial_json;
+        }
+      } else if(evt.type === 'content_block_stop'){
+        const b = blocks[evt.index];
+        if(b && b.type === 'server_tool_use' && b.name === 'web_search'){
+          try{
+            const parsed = JSON.parse(b.partialJson || '{}');
+            if(parsed.query){ addSearchLogItem(parsed.query); setStatus('Searching the web…', true); }
+          }catch(e){ /* ignore partial parse issues */ }
+        }
+      } else if(evt.type === 'message_delta'){
+        if(evt.delta && evt.delta.stop_reason){ stopReason = evt.delta.stop_reason; }
+      }
+    }
+  }
+
+  let fullText = '';
+  Object.keys(blocks).map(Number).sort((a,b)=>a-b).forEach(idx => {
+    if(blocks[idx].type === 'text'){ fullText += blocks[idx].text; }
+  });
+
+  return { text: fullText, stopReason };
+}
+
+function pdfSanitize(str){
+  let s = String(str).normalize('NFKD');
+  const map = {'\u2018':'\x91','\u2019':'\x92','\u201C':'\x93','\u201D':'\x94','\u2013':'-','\u2014':'--','\u2026':'...','\u2022':'-','\u00A0':' ','\u00D7':'x','\u2192':'->'};
+  let out='';
+  for(const ch of s){
+    if(map[ch] !== undefined){ out+=map[ch]; continue; }
+    const code=ch.codePointAt(0);
+    if(code>=0x300 && code<=0x36F) continue;
+    if(code<256){ out+=ch; continue; }
+  }
+  return out;
+}
+function pdfEscape(str){ return str.replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)'); }
+
+function pdfWrapPlain(text, size, factor, maxWidth){
+  const cpl = Math.max(10, Math.floor(maxWidth/(size*factor)));
+  const words = text.split(/\s+/);
+  const lines=[]; let cur='';
+  for(const w of words){
+    const trial = cur? cur+' '+w : w;
+    if(trial.length>cpl && cur){ lines.push(cur); cur=w; }
+    else cur=trial;
+  }
+  if(cur) lines.push(cur);
+  return lines;
+}
+function pdfStripMd(t){ return t.replace(/\*\*(.+?)\*\*/g,'$1').replace(/\*(.+?)\*/g,'$1').replace(/\[(.+?)\]\((.+?)\)/g,'$1 ($2)'); }
+
+function pdfParseBlocks(md){
+  const lines = md.replace(/\r/g,'').split('\n');
+  const blocks=[]; let listBuf=[], listOrdered=false, tableBuf=[];
+  function flushList(){ if(listBuf.length){ blocks.push({type:'list', items:listBuf.slice(), ordered:listOrdered}); listBuf=[]; } }
+  function flushTable(){ if(tableBuf.length){ blocks.push({type:'table', rows:tableBuf.slice()}); tableBuf=[]; } }
+  for(const raw of lines){
+    if(/^\s*\|/.test(raw)){ tableBuf.push(raw); continue; } else if(tableBuf.length){ flushTable(); }
+    if(/^#{1,3}\s+/.test(raw)){ flushList(); blocks.push({type:'heading', text:raw.replace(/^#{1,3}\s+/,'').trim()}); continue; }
+    if(/^\s*[-*]\s+/.test(raw)){ if(listBuf.length && listOrdered){ flushList(); } listOrdered=false; listBuf.push(raw.replace(/^\s*[-*]\s+/,'')); continue; }
+    if(/^\s*\d+\.\s+/.test(raw)){ if(listBuf.length && !listOrdered){ flushList(); } listOrdered=true; listBuf.push(raw.replace(/^\s*\d+\.\s+/,'')); continue; }
+    flushList();
+    if(raw.trim()===''){ continue; }
+    blocks.push({type:'para', text:raw});
+  }
+  flushList(); flushTable();
+  return blocks;
+}
+
+function buildPdfBytes(destination, tripType, logLabel, markdownText){
+  const pageW=612, pageH=792, marginX=50, marginTop=742, marginBottom=50, maxWidth=pageW-marginX*2;
+
+  const pages = [[]];
+  let y = marginTop;
+  function addLine(x, text, font, size){
+    if(y < marginBottom){ pages.push([]); y = marginTop; }
+    pages[pages.length-1].push({x, y, text, font, size});
+    y -= size*1.35;
+  }
+
+  addLine(marginX, pdfSanitize(destination), 'F2', 18); y-=4;
+  addLine(marginX, pdfSanitize(tripType+'  |  '+logLabel+'  |  Generated '+new Date().toLocaleString()), 'F3', 8); y-=10;
+
+  const blocks = pdfParseBlocks(markdownText);
+  for(const block of blocks){
+    if(block.type==='heading'){
+      y-=4;
+      addLine(marginX, pdfSanitize(pdfStripMd(block.text)), 'F2', 12.5);
+      y-=2;
+    } else if(block.type==='para'){
+      pdfWrapPlain(pdfSanitize(pdfStripMd(block.text)),10.5,0.5,maxWidth).forEach(l=>addLine(marginX,l,'F1',10.5));
+      y-=4;
+    } else if(block.type==='list'){
+      block.items.forEach((item,idx)=>{
+        const bullet = block.ordered? (idx+1)+'.' : '-';
+        const wrapped = pdfWrapPlain(pdfSanitize(pdfStripMd(item)),10.5,0.5,maxWidth-16);
+        wrapped.forEach((l,li)=>{
+          addLine(marginX+16, (li===0? bullet+' ':'')+l, 'F1', 10.5);
+        });
+      });
+      y-=4;
+    } else if(block.type==='table'){
+      const rows = block.rows.filter(r=>!/^\s*\|?\s*-{2,}/.test(r)).map(r=>r.trim().replace(/^\||\|$/g,'').split('|').map(c=>pdfSanitize(pdfStripMd(c.trim()))));
+      if(rows.length){
+        const colCount = rows[0].length;
+        const colWidths=[];
+        for(let c=0;c<colCount;c++){
+          let w=0; rows.forEach(r=>{ if(r[c]) w=Math.max(w, r[c].length); });
+          colWidths.push(Math.min(w,28));
+        }
+        rows.forEach((r,ri)=>{
+          const line = r.map((cell,ci)=> (cell||'').slice(0,colWidths[ci]).padEnd(colWidths[ci],' ')).join(' | ');
+          addLine(marginX, line, ri===0?'F2':'F3', 8.5);
+        });
+        y-=6;
+      }
+    }
+  }
+
+  const fontNums = { F1:3, F2:4, F3:5 };
+  const pageCount = pages.length;
+  const firstPageObjNum = 6;
+  const pageObjNums=[], contentObjNums=[];
+  for(let i=0;i<pageCount;i++){ pageObjNums.push(firstPageObjNum+2*i); contentObjNums.push(firstPageObjNum+2*i+1); }
+  const catalogNum=1, pagesNum=2;
+  const maxObjNum = Math.max(pagesNum, fontNums.F3, ...pageObjNums, ...contentObjNums, catalogNum);
+
+  const objStrings = {};
+  objStrings[catalogNum] = `<< /Type /Catalog /Pages ${pagesNum} 0 R >>`;
+  objStrings[pagesNum] = `<< /Type /Pages /Kids [${pageObjNums.map(n=>n+' 0 R').join(' ')}] /Count ${pageCount} >>`;
+  objStrings[fontNums.F1] = `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>`;
+  objStrings[fontNums.F2] = `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>`;
+  objStrings[fontNums.F3] = `<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>`;
+
+  for(let i=0;i<pageCount;i++){
+    const pnum = pageObjNums[i], cnum = contentObjNums[i];
+    objStrings[pnum] = `<< /Type /Page /Parent ${pagesNum} 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /Font << /F1 ${fontNums.F1} 0 R /F2 ${fontNums.F2} 0 R /F3 ${fontNums.F3} 0 R >> >> /Contents ${cnum} 0 R >>`;
+    let stream = 'BT\n';
+    pages[i].forEach(item=>{
+      stream += `/${item.font} ${item.size} Tf 1 0 0 1 ${item.x.toFixed(2)} ${item.y.toFixed(2)} Tm (${pdfEscape(item.text)}) Tj\n`;
+    });
+    stream += 'ET';
+    objStrings[cnum] = `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`;
+  }
+
+  let pdf = '%PDF-1.4\n';
+  const offsets = {};
+  for(let n=1;n<=maxObjNum;n++){
+    if(objStrings[n] === undefined) continue;
+    offsets[n] = pdf.length;
+    pdf += `${n} 0 obj\n${objStrings[n]}\nendobj\n`;
+  }
+  const xrefStart = pdf.length;
+  pdf += `xref\n0 ${maxObjNum+1}\n0000000000 65535 f \n`;
+  for(let n=1;n<=maxObjNum;n++){
+    const off = offsets[n];
+    pdf += (off!==undefined? String(off).padStart(10,'0') : '0000000000') + ' 00000 n \n';
+  }
+  pdf += `trailer\n<< /Size ${maxObjNum+1} /Root ${catalogNum} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+
+  const bytes = new Uint8Array(pdf.length);
+  for(let i=0;i<pdf.length;i++){ bytes[i] = pdf.charCodeAt(i) & 0xFF; }
+  return bytes;
+}
+
+let lastPdfUrl = null;
+function downloadResultAsPdf(destination, tripType, logLabel, markdownText){
+  const bytes = buildPdfBytes(destination, tripType, logLabel, markdownText);
+  if(lastPdfUrl){ URL.revokeObjectURL(lastPdfUrl); }
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  lastPdfUrl = URL.createObjectURL(blob);
+  const filename = slugify(destination) + '-' + slugify(logLabel).slice(0,40) + '.pdf';
+  const a = document.createElement('a');
+  a.href = lastPdfUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  return { filename, url: lastPdfUrl };
+}
+
 async function runResearch(){
   const destination = destEl.value.trim();
   const userTypedQuery = queryEl.value.trim();
@@ -344,7 +616,10 @@ async function runResearch(){
   if(!destination){ statusEl.innerHTML = '<span class="error">Enter a destination first.</span>'; return; }
 
   runBtn.disabled = true;
-  statusEl.textContent = 'Searching the web and comparing sources…';
+  runBtn.textContent = 'Researching…';
+  setStatus('Searching the web and comparing sources…', true);
+  clearSearchLog();
+  pdfNoteEl.textContent = '';
   resultPanel.style.display = 'none';
 
   const context = [
@@ -388,36 +663,19 @@ Keep it concise but decision-ready. Use bullet points or a markdown table under 
     let fullText = '';
     let iterations = 0;
     const maxIterations = 4;
+    const tools = [{ type: "web_search_20250305", name: "web_search" }];
 
     while(iterations < maxIterations){
       iterations++;
-      if(iterations > 1){ statusEl.textContent = 'Response was long — fetching the rest…'; }
+      if(iterations > 1){ setStatus('Response was long — fetching the rest…', true); }
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: messages,
-          tools: [{ type: "web_search_20250305", name: "web_search" }]
-        })
-      });
-
-      if(!response.ok){ throw new Error('API error ' + response.status); }
-      const data = await response.json();
-
-      const textPart = (data.content || [])
-        .map(block => block.type === 'text' ? block.text : '')
-        .filter(Boolean)
-        .join('\n');
+      const { text: textPart, stopReason } = await streamClaude(messages, systemPrompt, tools);
       fullText += textPart;
 
-      if(data.stop_reason === 'max_tokens'){
+      if(stopReason === 'max_tokens'){
         messages = [
           ...messages,
-          { role: 'assistant', content: data.content },
+          { role: 'assistant', content: fullText },
           { role: 'user', content: 'Continue exactly where you left off. Do not repeat any earlier text and do not restart any section — just continue the markdown from the exact cut-off point.' }
         ];
         continue;
@@ -430,7 +688,26 @@ Keep it concise but decision-ready. Use bullet points or a markdown table under 
 
     resultBody.innerHTML = mdToHtml(text);
     resultPanel.style.display = 'block';
-    statusEl.textContent = 'Done.';
+    setStatus('Generating PDF…', true);
+
+    let pdfResult = null;
+    try{
+      pdfResult = downloadResultAsPdf(destination, tripTypeEl.value, logLabel, text);
+    }catch(pdfErr){
+      console.error('PDF export failed:', pdfErr);
+    }
+
+    setStatus('Done.', false);
+    if(pdfResult){
+      pdfNoteEl.innerHTML = 'PDF downloaded: ' + escapeHtml(pdfResult.filename) +
+        '<button type="button" class="pdf-btn" id="redownloadBtn">Download again</button>';
+      const redownloadBtn = document.getElementById('redownloadBtn');
+      if(redownloadBtn){
+        redownloadBtn.addEventListener('click', () => downloadResultAsPdf(destination, tripTypeEl.value, logLabel, text));
+      }
+    } else {
+      pdfNoteEl.textContent = "Couldn't generate the PDF — the research above is still complete.";
+    }
 
     await saveEntry(destination, tripTypeEl.value, logLabel, text);
     await renderLedger();
@@ -442,6 +719,7 @@ Keep it concise but decision-ready. Use bullet points or a markdown table under 
     statusEl.innerHTML = '<span class="error">Something went wrong: ' + (err.message || err) + '</span>';
   } finally {
     runBtn.disabled = false;
+    runBtn.textContent = 'Research this';
   }
 }
 
